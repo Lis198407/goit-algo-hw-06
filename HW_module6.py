@@ -81,15 +81,15 @@ class AddressBook(UserDict):
     
     def __init__(self, name:str):
         self.name = Name(name)
-        self.records = []
+        self.data = []
      
     def find(self, record_name: str) -> Record:                               #Finds Record by Name and returns Record if found
-        return next((rec for rec in self.records if rec.name.value == record_name), None)
+        return next((rec for rec in self.data if rec.name.value == record_name), None)
         
-    def add(self, record:Record):                                             #adding the record by records
+    def add(self, record:Record):                                             #adding the record to records in self.data
         try:
             if not self.find(record.name):                                    #checking for duplicates
-                self.records.append(record)
+                self.data.append(record)
                 self.record_count +=1                                         #increasing Quantity of records in AdressBook                                
             else:
                 raise WrongRecord(f"Record {record} already exist in phonebook {self.name}")
@@ -99,8 +99,8 @@ class AddressBook(UserDict):
     def delete(self, rec_name: str):                                          #deleting the Record by record Name
         try:
             record = self.find(rec_name)
-            if record:                                                        # if Record in Records in AdressBook than Pop it
-                self.records.remove(record)                
+            if record:                                                        # if Record in records in self.data in AdressBook than Pop it
+                self.data.remove(record)                
                 self.record_count -=1
             else:
                 raise WrongRecord(f"No such record {record} in phonebook {self.name}") #Raise the exception, that delete can't be made
@@ -109,7 +109,7 @@ class AddressBook(UserDict):
 
     def __str__(self):
         message = f"Adress Book name is {self.name.value}.\nContacts: \n"
-        for record in self.records:
+        for record in self.data:
                 message += f"{record}\n"
         return message
 
