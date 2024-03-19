@@ -35,7 +35,7 @@ class Record:
         self.name = Name(name)
         self.phones = []
 
-    def find_by_phone(self, phone_str:str)-> Phone:                         #find a Phone obj in record by phone in str
+    def find_phone(self, phone_str:str)-> Phone:                         #find a Phone obj in record by phone in str
         return next((phone for phone in self.phones if phone.value == phone_str), None)
     
     def add_phone(self, phone_str:str):                                     #Adding phone from str
@@ -51,9 +51,9 @@ class Record:
                 print(ex)
 
 
-    def del_phone(self, phone_str: str):                                        #deleting phone from record
+    def remove_phone(self, phone_str: str):                                        #deleting phone from record
         try:
-            phone_to_del = self.find_by_phone(phone_str)                        #findind the Phone in Record by str of the phone
+            phone_to_del = self.find_phone(phone_str)                        #findind the Phone in Record by str of the phone
             if phone_to_del:
                 self.phones.remove(phone_to_del)
             else:
@@ -63,7 +63,7 @@ class Record:
     
     def edit_phone(self, old_phone_str:str, new_phone_str:str):              # Editing the phone by finding the phone by phone and changing to new one
         try:
-            old_phone = self.find_by_phone(old_phone_str)
+            old_phone = self.find_phone(old_phone_str)
             new_phone = Phone(new_phone_str)
             if old_phone and new_phone.is_phone:                             #checking if Phone to change in Record and weather new phone in Phone according to rules of 10 digits
                 i = self.phones.index(old_phone)
@@ -86,7 +86,7 @@ class AddressBook(UserDict):
     def find(self, record_name: str) -> Record:                               #Finds Record by Name and returns Record if found
         return next((rec for rec in self.data if rec.name.value == record_name), None)
         
-    def add(self, record:Record):                                             #adding the record to records in self.data
+    def add_record(self, record:Record):                                             #adding the record to records in self.data
         try:
             if not self.find(record.name):                                    #checking for duplicates
                 self.data.append(record)
@@ -124,13 +124,13 @@ def main():
     john_record.add_phone("66666666666")
     john_record.add_phone("6666666666")
     print(f"adding numbers to John, {john_record}")
-    john_record.del_phone("6666666666")
+    john_record.remove_phone("6666666666")
     print(f"deleting phone 6666666666 {john_record}")
 
-    book.add(john_record)                                               # Додавання запису John до адресної книги
+    book.add_record(john_record)                                               # Додавання запису John до адресної книги
     jane_record = Record("Jane")                                        # Створення та додавання нового запису для Jane
     jane_record.add_phone("9876543210")
-    book.add(jane_record)
+    book.add_record(jane_record)
 
     print(f"Adressbook after add Jane is {book}")
 
@@ -139,7 +139,7 @@ def main():
     john.edit_phone("1234567890", "1112223333")
     print(f"John after edit phone 1234567890 to 1112223333 is {john}")  # Виведення: Contact name: John, phones: 1112223333; 5555555555
     
-    found_phone = john.find_by_phone("5555555555")                      # Пошук конкретного телефону у записі John
+    found_phone = john.find_phone("5555555555")                      # Пошук конкретного телефону у записі John
     if found_phone: 
         print(f"{found_phone} is phone of {john}")                      # Виведення: 5555555555
     else:
